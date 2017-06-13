@@ -13,5 +13,6 @@ class ChainItem(Item):
     Price = Field()
     Status = Field()
     Description = Field()
+    Image = Field()
     
     

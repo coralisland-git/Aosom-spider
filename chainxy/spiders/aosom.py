@@ -57,14 +57,15 @@ class AosomSpider(scrapy.Spider):
 		try:
 			item = ChainItem()
 			item['Name'] = self.validate(response.xpath('//div[contains(@class, "product-shop")]//h1[@itemprop="name"]/text()').extract_first())
-			item['Code'] = self.validate(response.xpath('//div[contains(@class, "product-shop")]//div[@class="product_sku"]//span[@class="sku"]/text()').extract_first())
+			item['Code'] = 'AOS-' + self.validate(response.xpath('//div[contains(@class, "product-shop")]//div[@class="product_sku"]//span[@class="sku"]/text()').extract_first())
 			item['Price'] = self.validate(response.xpath('//div[contains(@class, "product-shop")]//div[@class="price-box"]//span[@class="price"]/text()').extract_first())
 			status = response.xpath('//div[contains(@class, "product-shop")]//p[@class="availability in-stock"]//span/@class').extract_first()
 			if 'checked' in status.lower():
 				item['Status'] = 'True'
 			else:
 				item['Status'] = 'False'
-			item['Description'] = self.str_concat(response.xpath('//div[contains(@class, "product-shop")]//div[@itemprop="description"]//text()').extract(), ', ')
+			item['Description'] = self.format(self.str_concat(response.xpath('//div[contains(@class, "product-shop")]//div[@itemprop="description"]//text()').extract(), ', '))
+			item['Image'] = self.validate(response.xpath('//div[@class="product-image product-image-zoom"]//img[@itemprop="image"]/@src').extract_first())
 			yield item
 		except:
 			pass
@@ -83,3 +84,6 @@ class AosomSpider(scrapy.Spider):
 				tmp += self.validate(item) + unit
 		tmp += self.validate(items[-1])
 		return tmp
+
+	def format(self, item):
+		return item.encode('raw-unicode-escape').strip()

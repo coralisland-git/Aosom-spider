@@ -26,7 +26,7 @@ class ChainxyPipeline(object):
         file = open('%s_%s.csv' % (spider.name, datetime.datetime.strftime(datetime.datetime.now(),'%Y%m%d')), 'w+b')
         self.files[spider] = file
         self.exporter = CsvItemExporter(file)
-        self.exporter.fields_to_export = ['Name', 'Code', 'Price', 'Status', 'Description']
+        self.exporter.fields_to_export = ['Name', 'Code', 'Price', 'Status', 'Description', 'Image']
         self.exporter.start_exporting()        
 
     def spider_closed(self, spider):
